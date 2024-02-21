@@ -4,7 +4,7 @@ import time
 import os
 import TrajectoryManager as tm
 from ultralytics import YOLO
-from ultralytics.utils.plotting import Annotator
+#from ultralytics.utils.plotting import Annotator
 from numpy import array
 def distancia_entre_pontos(x1, y1, x2, y2):
     return np.sqrt((x1 - x2)**2 + (y1 - y2)**2)
@@ -24,7 +24,7 @@ auxiliar_bola = 0
 print(os.getcwd())
 
 #cap = cv.VideoCapture('rtsp://playtime.cctvddns.net:554/profile1')
-cap = cv2.VideoCapture("frame2record.mp4")
+cap = cv2.VideoCapture("recordfinal_9.mp4")
 bgSubtractor = cv2.createBackgroundSubtractorKNN(history = 10, dist2Threshold = 200.0)
 kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
 
@@ -33,13 +33,13 @@ kernel_dilation = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(kernel_size,kerne
 kernel_open = cv2.getStructuringElement(cv2.MORPH_RECT,(3,3))
 
 frame_count = 0
-trajectory_image = np.zeros([360, 1280, 3], np.uint8)
-point_image = np.zeros([360, 1280, 3], np.uint8)
+trajectory_image = np.zeros([360, 640, 3], np.uint8)
+point_image = np.zeros([360, 640, 3], np.uint8)
 
 
 manager = tm.TrajectoryManager()
 cv2.namedWindow('raw', cv2.WINDOW_NORMAL)
-cv2.resizeWindow('raw', 1280, 360)
+cv2.resizeWindow('raw', 640, 360)
 
 _, one = cap.read()
 past = one
@@ -125,7 +125,7 @@ while True:
             continue
 
         for index, point in enumerate(points):
-            if point[0] < 360 and point[1] < 1280:
+            if point[0] < 360 and point[1] < 640:
 
                 trajectory_image[point[0], point[1]] = (0, 255, 0)
                 cv2.circle(frame, (point[1], point[0]), 2, (255, 255, 255), 2)
@@ -159,9 +159,9 @@ while True:
     coordenadas_exibidas = []
 
     ret, frame = cap.read()
-    resize_scale = 1280. / float(frame.shape[1])
+    resize_scale = 640. / float(frame.shape[1])
 
-    frame = cv2.resize(frame, (1280, 360))
+    frame = cv2.resize(frame, (640, 360))
 
     blur = cv2.GaussianBlur(frame, (7, 7), 0)
 
@@ -220,7 +220,7 @@ while True:
     # cv2.line(frame, (0, 353), (frame.shape[1], 353), (255, 0, 0), 2)
 
     # results = model.predict(frame)
-    annotator = Annotator(frame)
+    #annotator = Annotator(frame)
 
     # Clear the minimap by creating a new black image
     minimap = np.zeros(minimap_size, dtype=np.uint8)
